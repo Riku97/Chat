@@ -29,6 +29,10 @@ io.on('connection', (socket)=>{
     socket.on("streaming",(image)=>{
         socket.broadcast.emit('stream', image);
     });
+
+    socket.on("audio", (audio)=>{
+        socket.broadcast.emit('listen', audio);
+    });
 });
 io.on('connect', ()=>{
     console.log("Usuario conectado.")
