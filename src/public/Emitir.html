@@ -11,11 +11,9 @@
     <h1>Emision en directo</h1>
     <button id="btn">Emitir</button>
     <video src="" id="video" style="width: 800px; height: 800px;" autoplay="true"></video>
-    <audio id="audio" src=""></audio>
     <div class="status"></div>
 
     <canvas id="preview"></canvas>
-    <canvas id='reproductor' src=""></canvas>
     <button id="pre">Previsualización</button>
     <br>
 
@@ -62,10 +60,8 @@
         var btn = document.getElementById("btn");
         var btnpre = document.getElementById("pre");
         var canvas = document.getElementById("preview");
-        var reproductor = document.getElementById("reproductor");
         var context = canvas.getContext('2d');
-        var video = document.getElementById('video');
-        var audio = document.getElementById('audio');
+        var video = document.getElementById('video')
         var socket = io();
 
         canvas.width = 512;
@@ -80,30 +76,14 @@
 
         function loadCamara (stream){
             video.srcObject = stream;
-            audio.src = stream.getAudioTracks();
-            console.log(stream.id);
-            console.log(stream.Medi);
-            console.log('getUserMedia() got stream:', stream);
-
             publicarMensaje('Camara funcionando');
-        }
-
-        function loadMicrophone (stream){
-            var microphone = context.createMediaStreamSource(stream);
-            var filter = context.createBiquadFilter();
-            microphone.connect(filter);
-            publicarMensaje('Microfono funcionando.')
-        }
-
-        function errorMicro(){
-            publicarMensaje('Microfono ha fallado');
         }
 
         function errorCamara(){
             publicarMensaje('Camara ha fallado');
         }
 
-        function verVideo (video){
+        function verVideo (video, context){
             context.drawImage(video, 0, 0, context.width, context.height);
             socket.emit('streaming', canvas.toDataURL('image/webp'));
            
@@ -117,18 +97,16 @@
             }
             
         })
-  
+
         btn.addEventListener('click', () =>{
             navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia);
 
             if(navigator.getUserMedia){
-                navigator.getUserMedia({video:true, audio:true}, loadCamara, errorCamara);
-                //navigator.getUserMedia({audio:true}, loadMicrophone, errorMicro);
+                navigator.getUserMedia({video:true, audio: true}, loadCamara, errorCamara);
             }
 
             var intervalo = setInterval(() =>{
                 verVideo(video, context);
-
                 //console.log("emitiendo");
             }, 30);
         });
