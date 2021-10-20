@@ -11,9 +11,10 @@
     <h1>Visualizar</h1>
     <button id="btn">Visualizar</button>
     <br>
-    <!--<video id="video" style="width: 80px; height:80px;"></video>-->
     <div class="status"></div>
+    <canvas id="canvas" style="width: 800px; height: 800px;"></canvas>
     <img id ="play" style="width: 800px; height: 800px;" alt="">
+    <audio id="audio" src="" autoplay></audio>
     <br>
 
 
@@ -62,15 +63,24 @@
     <script>
         var btn = document.getElementById("btn");
         var socket = io("ws://localhost:3000");
-        //var vi = document.getElementById("video");
+        var audio = document.getElementById("audio");
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext('2d');
+
+        canvas.width = 512;
+        canvas.height = 384;
+
+        context.width = canvas.width;
+        context.height = canvas.height;
 
         btn.addEventListener('click', ()=>{
             console.log("Hola");
             socket.on('stream', (image) =>{
-                let img = document.getElementById("play");
-                img.src = image;
-                //vi.src = video;
-                //console.log("Recibiendo");
+                //let img = document.getElementById("play");
+                context.drawImage(video, 0, 0, context.width, context.height);
+                //img.src = image;
+                audio.src = image;
+                console.log("Recibiendo");
             });
         });
 

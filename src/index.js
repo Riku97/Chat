@@ -39,5 +39,5 @@ io.on('disconnect', ()=>{
 });
 
 http.listen(port, () => {
-    console.log("Servidor en puerto 3000."); 
+    console.log("Servidor en puerto $d.", port); 
 });
