@@ -33,13 +33,13 @@ io.on('connection', (socket)=>{
     socket.on("audio", (audio)=>{
         socket.broadcast.emit('listen', audio);
     });
+
+    io.on('disconnect', ()=>{
+        console.log("Usuario desconectado");
+    });
 });
 io.on('connect', ()=>{
     console.log("Usuario conectado.")
-});
-//si se desconecta un usuario.
-io.on('disconnect', ()=>{
-    console.log("Usuario desconectado");
 });
 
 http.listen(port, () => {

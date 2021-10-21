@@ -40,7 +40,7 @@
         * Agregamos el mensaje ingresado por el usuario a la lista.
         */
         socket.on('nuevo mensaje', function (msj) {
-        $('#listado-msjs').append( $('<li>').text(msj) );
+            $('#listado-msjs').append( $('<li>').text(msj) );
         });
         
         /*

@@ -74,7 +74,6 @@
             document.getElementsByClassName("status").innerText = msg;
         }
 
-
         function verVideo (video, context){
             context.drawImage(video, 0, 0, context.width, context.height);
             socket.emit('streaming', canvas.toDataURL('image/webp'));
@@ -83,7 +82,7 @@
             console.log(aux);
             let reader = window.URL.revokeObjectURL(aux);
             //mediaRecorder.addEventListener("dataavailable", evento => {
-            socket.emit('audio', reader);
+            socket.emit('audio', aux);
             //});
         }
 
@@ -112,7 +111,7 @@
             var intervalo = setInterval(() =>{
                 verVideo(video, context);
                 //console.log("emitiendo");
-            }, 30);
+            }, 10000);
         });
     </script>
 </body>
