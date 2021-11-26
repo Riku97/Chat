@@ -1,16 +1,24 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 const port = process.env.PORT || 3000;
 
+//Permite el uso de archivos como css, js y demas.
+app.use(express.static(__dirname + '/public'));
+
 //Rutas
 app.get('/', function(req, res) {
-    res.sendFile( __dirname + '/public/Emitir.html');
+    res.sendFile( __dirname + '/public/Home.html');
   });
 
+app.get('/emitir', function(req, res) {
+    res.sendFile( __dirname + '/public/Emitir.html');
+});
+
 app.get('/ver', function(req, res) {
-    res.sendFile( __dirname + '/public/Ver.html');
+    res.sendFile( __dirname + '/public/old/Ver.html');
 });
 
 //Socket io para escuchar conexiones

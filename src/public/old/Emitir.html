@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emision</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Emision en directo</h1>
+    <button id="btn">Emitir</button>
+    <video src="" id="video" style="width: 800px; height: 800px;" autoplay="true"></video>
+    <div class="status"></div>
+
+    <canvas id="preview"></canvas>
+    <button id="pre">Previsualización</button>
+    <br>
+
+
+
+    <h3>Mensajes:</h3>
+    <ul id="listado-msjs">
+        
+    </ul>
+    <div id="env-msjs">
+        <input id="nuevo-msj"  placeholder="Nuevo mensaje">
+        <button id="btn-msj" onclick="enviarMensaje()">Enviar</button>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    
+    <!-- Script para chat de texto -->
+    <script>
+        var socket = io(); // Inicializamos socketIO en el cliente
+     
+        /*
+        * Evento listener para el 'nuevo mensaje'
+        *   Se puede ver que es el mismo evento que se envia 
+        *   desde el servidor.
+        * Agregamos el mensaje ingresado por el usuario a la lista.
+        */
+        socket.on('nuevo mensaje', function (msj) {
+        $('#listado-msjs').append( $('<li>').text(msj) );
+        });
+        
+        /*
+        * Emitimos un evento de tipo 'nuevo mensaje' cada vez
+        * que se presiona el botón enviar y enviamos
+        * su contenido como mensaje.
+        */
+        function enviarMensaje() {
+            socket.emit('nuevo mensaje', $('#nuevo-msj').val());
+            $('#nuevo-msj').val('');
+        };
+    </script>
+
+
+    <!-- Script para emision de video -->
+    <script>
+        var btn = document.getElementById("btn");
+        var btnpre = document.getElementById("pre");
+        var canvas = document.getElementById("preview");
+        var context = canvas.getContext('2d');
+        var video = document.getElementById('video')
+        var socket = io();
+
+        canvas.width = 512;
+        canvas.height = 384;
+
+        context.width = canvas.width;
+        context.height = canvas.height;
+
+        function publicarMensaje(msg){
+            document.getElementsByClassName("status").innerText = msg;
+        }
+
+        function verVideo (video, context){
+            context.drawImage(video, 0, 0, context.width, context.height);
+            socket.emit('streaming', canvas.toDataURL('image/webp'));
+            let blob = new Blob(video.Blob, {type : 'audio/mp3'});
+            let aux = URL.createObjectURL(blob);
+            console.log(aux);
+            let reader = window.URL.revokeObjectURL(aux);
+            //mediaRecorder.addEventListener("dataavailable", evento => {
+            socket.emit('audio', aux);
+            //});
+        }
+
+        btnpre.addEventListener('click', ()=>{
+            if(canvas.style.display == 'none'){
+                canvas.style.display = 'block';
+            }else{
+                canvas.style.display = 'none';
+            }
+            
+        })
+
+        btn.addEventListener('click', () =>{
+            navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia);
+
+            if(navigator.getUserMedia){
+                navigator.getUserMedia({video:true, audio: true}, 
+                stream => {
+                    video.srcObject = stream;
+                    publicarMensaje('Camara funcionando');
+
+                }, error =>{
+                    publicarMensaje('Camara ha fallado');
+                });
+            }
+            var intervalo = setInterval(() =>{
+                verVideo(video, context);
+                //console.log("emitiendo");
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
