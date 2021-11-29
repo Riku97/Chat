@@ -10,46 +10,46 @@ app.use(express.static(__dirname + '/public'));
 
 //Rutas
 app.get('/', function(req, res) {
-    res.sendFile( __dirname + '/public/Home.html');
-  });
+    res.sendFile(__dirname + '/public/Home.html');
+});
 
 app.get('/emitir', function(req, res) {
-    res.sendFile( __dirname + '/public/Emitir.html');
+    res.sendFile(__dirname + '/public/Emitir.html');
 });
 
 app.get('/ver', function(req, res) {
-    res.sendFile( __dirname + '/public/old/Ver.html');
+    res.sendFile(__dirname + '/public/old/Ver.html');
 });
 
 //Socket io para escuchar conexiones
-io.on('connection', (socket)=>{
+io.on('connection', (socket) => {
 
     console.log("Nueva conexion");
-    
+
     //Aqui definimos que debe de hacer la nueva conexion detectada.
 
     //si recibimos un evento "nuevo mensaje"
-    socket.on("nuevo mensaje", (msj)=>{
+    socket.on("nuevo mensaje", (msj) => {
         io.emit('nuevo mensaje', msj);
     });
 
     //si recibimos un evento "streaming"
-    socket.on("streaming",(image)=>{
+    socket.on("streaming", (image) => {
         socket.broadcast.emit('stream', image);
     });
 
-    socket.on("audio", (audio)=>{
-        socket.broadcast.emit('listen', audio);
+    socket.on("audio", (media) => {
+        socket.broadcast.emit('listen', media);
     });
 
-    io.on('disconnect', ()=>{
+    io.on('disconnect', () => {
         console.log("Usuario desconectado");
     });
 });
-io.on('connect', ()=>{
+io.on('connect', () => {
     console.log("Usuario conectado.")
 });
 
 http.listen(port, () => {
-    console.log("Servidor en puerto 3000."); 
+    console.log("Servidor en puerto 3000.");
 });

@@ -18,23 +18,16 @@ function publicarMensaje(msg) {
 function verVideo(video, context) {
     context.drawImage(video, 0, 0, context.width, context.height);
     socket.emit('streaming', canvas.toDataURL('image/webp'));
-    let blob = new Blob(video.Blob, { type: 'audio/mp3' });
-    let aux = URL.createObjectURL(blob);
-    console.log(aux);
-    let reader = window.URL.revokeObjectURL(aux);
-    //mediaRecorder.addEventListener("dataavailable", evento => {
-    socket.emit('audio', aux);
-    //});
+
+    var splash = {
+        prefix: "data:audio/wav;base64,",
+        sound: [video.base64data]
+    };
+
+    let blob = new Blob(this.video.base64data, { type: 'audio/mp3' });
+    socket.emit('audio', blob);
 }
 
-/*btnpre.addEventListener('click', () => {
-    if (canvas.style.display == 'none') {
-        canvas.style.display = 'block';
-    } else {
-        canvas.style.display = 'none';
-    }
-
-})*/
 
 btn.addEventListener('click', () => {
     navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia);

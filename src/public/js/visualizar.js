@@ -1,6 +1,6 @@
 var btn = document.getElementById("btn");
 var socket = io("ws://localhost:3000");
-var audio = document.getElementById("audio");
+//var audio = document.getElementById("audio");
 //var vi = document.getElementById("video");
 
 btn.addEventListener('click', () => {
@@ -13,6 +13,8 @@ btn.addEventListener('click', () => {
     });
 
     socket.on('listen', (media) => {
+        let audio = document.getElementById("audio");
+
         audio.src = media;
         console.log("Recibiendo audio.");
     })
