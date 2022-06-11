@@ -3,10 +3,8 @@
 
 <head>
     <link rel="icon" type="image/png" href="../Imagenes/Logo.png" />
-    <base href="/">
-    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <meta name="Keywords" content="HTML, CSS, JavaScript, NodeJS">
@@ -22,7 +20,8 @@
                 <a href="./Home.html"><img id="Logo_H" src="../Imagenes/Logo.png"></a>
             </div>
             <div id="Visualizador">
-                <video src="" id="video" autoplay="true"></video>
+                <img id="play" alt="">
+                <audio id="audio" src=""></audio>
             </div>
             <div id="Chat">
                 <h3>Mensajes:</h3>
@@ -34,19 +33,18 @@
                     <button id="btn-msj" onclick="enviarMensaje()">Enviar</button>
                 </div>
             </div>
-            <button id="btn">Emitir</button>
+            <button id="btn">Visualizar</button>
             <div class="status"></div>
-            <canvas id="preview"></canvas>
         </div>
     </div>
 
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    
+
     <!-- Script para chat-->
     <script src="./js/chat.js"></script>
 
-    <!-- Script de emision de video -->
-    <script src="./js/emitir.js"></script>
+    <!-- Script de conexion de streaming -->
+    <script src="./js/visualizar.js"></script>
 </body>
 
 </html>
